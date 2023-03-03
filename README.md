@@ -9,18 +9,18 @@ In the project directory, you can run:
 
 ## Objective of this task
 
-  1. Improve codebase to follow standard react practice.
+  ## 1. Improve codebase to follow standard react practice.
 
- # Hint :
+ ### Hint :
      
      1. Make seperate components.
      2. Try to reuse the components.
 
-  2. There are bugs in the codebase that you have to solve.
+  ## 2. There are bugs in the codebase that you have to solve.
    
-   ## Bug Example : 
+   ### Bug Example : 
 
-   # 1. Modifying the state directly 
+   ### 1. Modifying the state directly 
 
 ```
 const [name,setName] = useState("");
@@ -32,10 +32,10 @@ useEffect(()=>{
 ```
 
 
-   # 2. Using class insted of className
+   ### 2. Using class insted of className
 
 ```
 <div class="userList">...</div>
 
 ```
-
+**Note: Form should be able to Post data !**
