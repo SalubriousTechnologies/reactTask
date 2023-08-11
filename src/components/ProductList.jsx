@@ -1,21 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "./Button";
 
 function calculate(seconds) {
   const start = new Date().getTime();
   while (new Date().getTime() - start < seconds * 1000) {}
 }
 
+function productReducer(state, action) {
+  switch (action.type) {
+    case "TOTAL_PRODUCT": {
+      state.count = action.count;
+      return state;
+    }
+    case "INCREMENT_PRODUCT_COUNT": {
+      state.count++;
+      return state;
+    }
+    case "New_PRODUCT_DETAIL": {
+      state.name = action.name;
+      return state;
+    }
+  }
+}
+
+let initialState = {
+  count: 0,
+  name: "",
+};
+
 function ProductList() {
   const [productList, setProductList] = useState([]);
   const [count, setCount] = useState(0);
+  const [productState, dispatch] = useReducer(productReducer, initialState);
   const [productTime, setProductTime] = useState(calculate(2));
   const navigate = useNavigate();
+  const clickRef = useRef(null);
 
   async function getAllProducts() {
     let data = await fetch("https://dummyjson.com/products");
     let { products } = await data.json();
     setProductList(products);
+    dispatch({ type: "TOTAL_PRODUCT", count: products.length });
   }
 
   function addNewProduct() {
@@ -33,6 +59,8 @@ function ProductList() {
       images: [],
     };
     productList[productList.length] = newProduct;
+    dispatch({ type: "New_PRODUCT_DETAIL", name: newProduct.title });
+    dispatch({ type: "INCREMENT_PRODUCT_COUNT" });
   }
 
   useEffect(() => {
@@ -57,12 +85,21 @@ function ProductList() {
             <span className="">Count : </span>
             {count}
           </h1>
+
           <button
             onClick={incrementCount()}
             className="bg-green-400 py-1 mt-8 text-sm px-2 rounded-md"
           >
             Increment Count
           </button>
+        </div>
+        <div>
+          <h1>Total Product</h1>
+          <h1>Count : {productState.count}</h1>
+          <h1>Name: {productState.name}</h1>
+        </div>
+        <div>
+          <Button ref={clickRef} />
         </div>
         <button
           onClick={addNewProduct}
